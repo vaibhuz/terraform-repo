@@ -88,11 +88,11 @@ resource "aws_instance" "server" {
   subnet_id                   = aws_subnet.sub1.id
   vpc_security_group_ids      = [aws_security_group.webSg.id]
   associate_public_ip_address = true
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo apt update -
-              sudo apt install -y mysql-client
-              EOF
+#   user_data = <<-EOF
+#               #!/bin/bash
+#               sudo apt update -
+#               sudo apt install -y mysql-client
+#               EOF
 
   tags = {
     Name = "UbuntuServer"
@@ -106,22 +106,22 @@ resource "aws_instance" "server" {
 #     timeout     = "5m"
 #   }
 
-   provisioner "file" {
-    source      = "file10"
-    destination = "/home/ubuntu/file10" #destination path on the remote instance copy the file10 from local to remote instance with the name file10
-  }
+#   provisioner "file" {
+#     source      = "file10"
+#     destination = "/home/ubuntu/file10" #destination path on the remote instance copy the file10 from local to remote instance with the name file10
+#   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "touch /home/ubuntu/file200",
-      "echo 'hello from multicloud devops nareshit' >> /home/ubuntu/file200"
-    ]
-  }
-   provisioner "local-exec" {
-    command = "touch file500" 
+#   provisioner "remote-exec" {
+#     inline = [
+#       "touch /home/ubuntu/file200",
+#       "echo 'hello from multicloud devops nareshit' >> /home/ubuntu/file200"
+#     ]
+#   }
+#    provisioner "local-exec" {
+#     command = "touch file500" 
     
    
- }
+#  }
  }
 resource "null_resource" "run_script" {
 
@@ -137,7 +137,7 @@ resource "null_resource" "run_script" {
 
   provisioner "remote-exec" {
     inline = [
-       "echo 'hello from veera FDE NIT' >> /home/ubuntu/file200",
+       #"echo 'hello from veera FDE NIT' >> /home/ubuntu/file200",
       
         "bash /home/ubuntu/dev.sh" # Assuming dev.sh is already on the instance 
     ]
@@ -145,11 +145,11 @@ resource "null_resource" "run_script" {
 
 #   triggers = {
 #     always_run = "${timestamp()}" # This will ensure the provisioner runs every time you apply, as the timestamp will always change.
-# #   }
-#  triggers = {
-#  script_hash = filemd5("dev.sh") # Rerun only if script changes
-# }
- }
+#   }
+ triggers = {
+ script_hash = filemd5("dev.sh") # Rerun only if script changes
+}
+}
 
 
 #Solution-2 to Re-Run the Provisioner
